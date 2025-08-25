@@ -1,0 +1,36 @@
+# Branch Protection Rules for MTA-STS Policy Repository
+# This file documents the required branch protection settings
+
+# Main Branch Protection Rules:
+# - Require status checks to pass before merging
+# - Require the "Validate MTA-STS Policy" workflow to pass
+# - Require pull request reviews before merging
+# - Restrict direct pushes to main branch
+
+# Required Status Checks:
+# - "Validate MTA-STS Policy" workflow must pass
+# - All other checks must pass
+
+# Branch Protection Settings (to be configured in GitHub UI):
+# 1. Go to Settings > Branches
+# 2. Add rule for "main" branch
+# 3. Enable "Require status checks to pass before merging"
+# 4. Search for and select "Validate MTA-STS Policy"
+# 5. Enable "Require branches to be up to date before merging"
+# 6. Enable "Require pull request reviews before merging"
+# 7. Set required approving reviews to 1
+# 8. Enable "Dismiss stale PR approvals when new commits are pushed"
+# 9. Enable "Restrict pushes that create files"
+# 10. Enable "Restrict pushes that delete files"
+# 11. Enable "Restrict pushes that modify files"
+# 12. Enable "Require linear history"
+# 13. Enable "Include administrators"
+# 14. Enable "Restrict deletions"
+
+# Additional Security Settings:
+# - Enable "Require conversation resolution before merging"
+# - Enable "Require signed commits"
+# - Enable "Require deployments to succeed before merging"
+
+# Note: These settings must be configured manually in the GitHub web interface
+# as they cannot be set via configuration files in the repository.

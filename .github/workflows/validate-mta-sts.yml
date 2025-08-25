@@ -1,0 +1,67 @@
+name: Validate MTA-STS Policy
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - '.well-known/mta-sts.txt'
+      - 'scripts/validate-policy.py'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '.well-known/mta-sts.txt'
+      - 'scripts/validate-policy.py'
+
+jobs:
+  validate-policy:
+    runs-on: ubuntu-latest
+    name: Validate MTA-STS Policy
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        
+    - name: Validate MTA-STS Policy
+      run: |
+        python scripts/validate-policy.py
+        
+    - name: Additional Policy Checks
+      run: |
+        echo "🔍 Running additional policy checks..."
+        
+        # Check if policy file exists
+        if [ ! -f ".well-known/mta-sts.txt" ]; then
+          echo "❌ MTA-STS policy file not found"
+          exit 1
+        fi
+        
+        # Check file permissions
+        if [ ! -r ".well-known/mta-sts.txt" ]; then
+          echo "❌ MTA-STS policy file is not readable"
+          exit 1
+        fi
+        
+        # Check file size (should be reasonable)
+        file_size=$(wc -c < ".well-known/mta-sts.txt")
+        if [ "$file_size" -gt 1024 ]; then
+          echo "❌ MTA-STS policy file is too large ($file_size bytes)"
+          exit 1
+        fi
+        
+        echo "✅ Additional policy checks passed"
+        
+    - name: Policy Summary
+      run: |
+        echo "📋 MTA-STS Policy Summary:"
+        echo "=========================="
+        cat .well-known/mta-sts.txt
+        echo "=========================="

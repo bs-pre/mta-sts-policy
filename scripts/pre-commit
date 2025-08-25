@@ -1,0 +1,22 @@
+#!/bin/bash
+# Pre-commit hook to validate MTA-STS policy before committing
+
+echo "🔍 Validating MTA-STS policy before commit..."
+
+# Check if the policy file is being modified
+if git diff --cached --name-only | grep -q "\.well-known/mta-sts\.txt"; then
+    echo "📝 MTA-STS policy file detected in commit, running validation..."
+    
+    # Run the validation script
+    if python3 scripts/validate-policy.py; then
+        echo "✅ MTA-STS policy validation passed - commit allowed"
+        exit 0
+    else
+        echo "❌ MTA-STS policy validation failed - commit blocked"
+        echo "Please fix the policy file before committing"
+        exit 1
+    fi
+else
+    echo "✅ No MTA-STS policy changes detected - commit allowed"
+    exit 0
+fi
